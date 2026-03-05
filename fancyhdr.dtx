@@ -8146,11 +8146,18 @@
 %
 %    \begin{macrocode}
 \newif\iff@nch@footnote
-\AtBeginDocument{%
-  \let\latex@makecol\@makecol
-  \def\@makecol{\ifvoid\footins\f@nch@footnotefalse\else\f@nch@footnotetrue\fi
-    \let\f@nch@topfloat\@toplist\let\f@nch@botfloat\@botlist\latex@makecol}%
-}
+\IfFormatAtLeastTF{2025-06-01}{%
+  \AddToHook{build/column/before}{%
+    \ifvoid\footins\f@nch@footnotefalse\else\f@nch@footnotetrue\fi
+    \let\f@nch@topfloat\@toplist\let\f@nch@botfloat\@botlist
+  }%
+}{%
+  \AtBeginDocument{%
+    \let\latex@makecol\@makecol
+    \def\@makecol{\ifvoid\footins\f@nch@footnotefalse\else\f@nch@footnotetrue\fi
+      \let\f@nch@topfloat\@toplist\let\f@nch@botfloat\@botlist\latex@makecol}%
+  }%
+} %%
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}

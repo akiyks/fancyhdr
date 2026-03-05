@@ -677,11 +677,18 @@
   \f@nch@gbl\def\f@nch@Oerf{\hss}%
 }
 \newif\iff@nch@footnote
-\AtBeginDocument{%
-  \let\latex@makecol\@makecol
-  \def\@makecol{\ifvoid\footins\f@nch@footnotefalse\else\f@nch@footnotetrue\fi
-    \let\f@nch@topfloat\@toplist\let\f@nch@botfloat\@botlist\latex@makecol}%
-}
+\IfFormatAtLeastTF{2025-06-01}{%
+  \AddToHook{build/column/before}{%
+    \ifvoid\footins\f@nch@footnotefalse\else\f@nch@footnotetrue\fi
+    \let\f@nch@topfloat\@toplist\let\f@nch@botfloat\@botlist
+  }%
+}{%
+  \AtBeginDocument{%
+    \let\latex@makecol\@makecol
+    \def\@makecol{\ifvoid\footins\f@nch@footnotefalse\else\f@nch@footnotetrue\fi
+      \let\f@nch@topfloat\@toplist\let\f@nch@botfloat\@botlist\latex@makecol}%
+  }%
+} %%
 \newcommand\iftopfloat[2]{\ifx\f@nch@topfloat\@empty #2\else #1\fi}%
 \newcommand\ifbotfloat[2]{\ifx\f@nch@botfloat\@empty #2\else #1\fi}%
 \newcommand\iffloatpage[2]{\if@fcolmade #1\else #2\fi}%
